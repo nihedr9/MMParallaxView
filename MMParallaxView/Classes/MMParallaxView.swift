@@ -83,7 +83,7 @@ public class MMParallaxView: UIView {
                 return
             }
             t.addSubview(maskTopView)
-
+            
             topFrameObserver =  t.observe(\.bounds, options: [.new], changeHandler: { [weak self] (view, value) in
                 self?.maskTopView.frame = value.newValue ?? .zero
             })
@@ -107,7 +107,7 @@ public class MMParallaxView: UIView {
                     guard let status = self?.status, let offset = value.newValue, let old = value.oldValue, self?.displayTimer == nil else {
                         return
                     }
-                 
+                    
                     switch status {
                     case .hide:
                         if offset.y < 0, old.y > 0 , !scroll.isTracking {
@@ -128,7 +128,7 @@ public class MMParallaxView: UIView {
         v.backgroundColor = UIColor.clear
         return v
     }()
-        
+    
     // 0 ~ 1
     public var pauseLocation: CGFloat?
     public var status: ShiftStatus = .show {
@@ -199,7 +199,7 @@ public class MMParallaxView: UIView {
         self.superview?.layoutIfNeeded()
     }
     
- 
+    
     public func showTopView() {
         self.startAnimate(isUp: false)
     }
@@ -314,7 +314,7 @@ public class MMParallaxView: UIView {
 }
 
 extension MMParallaxView {
-
+    
     @objc func pan(gesture: UIPanGestureRecognizer) {
         if let b = bottomGestureView, gesture.view != b {
             return
@@ -346,7 +346,7 @@ extension MMParallaxView {
             if shift == 0 {
                 break
             }
-
+            
             let will = self.scrollView.contentOffset.y-shift
             self.shift(position: will, isUp: shift < 0)
         default:
@@ -406,11 +406,16 @@ extension MMParallaxView: UIGestureRecognizerDelegate {
     }
     
     public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        
+        if otherGestureRecognizer.view is UICollectionView {
+            return false
+        }
+        
         if let other = otherGestureRecognizer.view as? UIScrollView, other != scrollView, bottomGestureView == nil {
             bottomGestureView = other
             bottomGestureView?.panGestureRecognizer.addTarget(self, action: #selector(pan(gesture:)))
             bottomGestureView?.decelerationRate = UIScrollView.DecelerationRate.normal
-
+            
         }
         return true
     }
