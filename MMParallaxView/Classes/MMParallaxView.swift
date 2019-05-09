@@ -407,7 +407,7 @@ extension MMParallaxView: UIGestureRecognizerDelegate {
     
     public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         
-        if otherGestureRecognizer.view is UICollectionView {
+        if !(otherGestureRecognizer.view is UITableView) {
             return false
         }
         
