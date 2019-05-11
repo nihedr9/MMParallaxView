@@ -407,9 +407,10 @@ extension MMParallaxView: UIGestureRecognizerDelegate {
     
     public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         
-        if !(otherGestureRecognizer.view is UITableView) {
+        guard otherGestureRecognizer.view is UITableView || otherGestureRecognizer is UIScreenEdgePanGestureRecognizer else {
             return false
         }
+        
         
         if let other = otherGestureRecognizer.view as? UIScrollView, other != scrollView, bottomGestureView == nil {
             bottomGestureView = other
